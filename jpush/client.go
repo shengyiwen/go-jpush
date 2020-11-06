@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"io"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"time"
 )
@@ -14,21 +15,33 @@ import (
 type Client struct {
 	AppKey       string
 	MasterSecret string
+	httpClient   *http.Client
 }
 
 func NewClient(appKey, masterSecret string) *Client {
-	return &Client{
+	client := &Client{
 		AppKey:       appKey,
 		MasterSecret: masterSecret,
 	}
+	client.initHttpClient()
+	return client
+}
+
+func (client *Client) initHttpClient() {
+	tr := &http.Transport{
+		DialContext: (&net.Dialer{
+			Timeout:   15 * time.Second,
+			KeepAlive: 120 * time.Second,
+		}).DialContext,
+		MaxIdleConns:        5,
+		MaxIdleConnsPerHost: 5,
+		IdleConnTimeout:     time.Second * 120,
+	}
+	client.httpClient = &http.Client{Transport: tr}
 }
 
 func (client *Client) GenerateAuthorization() string {
 	return base64.StdEncoding.EncodeToString([]byte(client.AppKey + ":" + client.MasterSecret))
-}
-
-var httpClient = &http.Client{
-	Timeout: time.Second * 5,
 }
 
 func (client *Client) Send(request *Request) (result *PushResult, err error) {
@@ -56,7 +69,7 @@ func (client *Client) Send(request *Request) (result *PushResult, err error) {
 	httpRequest.Header.Add("Accept-Charset", "UTF-8")
 	httpRequest.Header.Add("Charset", "UTF-8")
 
-	resp, err := httpClient.Do(httpRequest)
+	resp, err := client.httpClient.Do(httpRequest)
 	if err != nil {
 		return
 	}
