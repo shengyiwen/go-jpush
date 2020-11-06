@@ -12,8 +12,7 @@ import (
 )
 
 type Client struct {
-	AppKey string
-
+	AppKey       string
 	MasterSecret string
 }
 

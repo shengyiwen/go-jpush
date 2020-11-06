@@ -5,14 +5,14 @@ import "testing"
 func TestClient_SendNotification(t *testing.T) {
 	client := NewClient("x", "x")
 
-	request := Builder()
+	request := NewRequest()
 
-	platform := NewPlatform().Android()
+	platform := NewPlatform().Android().Ios()
 
 	request.SetPlatform(platform)
 
 	audience := NewAudience()
-	audience.SetRegistrationIds([]string{"13065ffa4e6342a6f5c"})
+	audience.SetRegistrationIds([]string{"140fe1da9e2573338e7"})
 
 	notification := &Notification{}
 	notification.Android = &AndroidNotification{

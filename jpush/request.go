@@ -16,7 +16,7 @@ type Request struct {
 	Callback *Callback `json:"callback,omitempty"`
 }
 
-func Builder() *Request {
+func NewRequest() *Request {
 	return &Request{}
 }
 
