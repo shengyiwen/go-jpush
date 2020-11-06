@@ -3,7 +3,7 @@ package jpush
 import "testing"
 
 func TestClient_SendNotification(t *testing.T) {
-	client := NewClient("414327d1e8b189a288bbc5ab", "c9626627f47ca4adabd973df")
+	client := NewClient("x", "x")
 
 	request := Builder()
 
