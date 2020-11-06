@@ -16,7 +16,7 @@
         // todo 更换appKey 和 secretKey
         client := NewClient("appKey", "secretKey")
     
-        request := Builder()
+        request := NewRequest()
     
         platform := NewPlatform().Android()
     
