@@ -20,30 +20,37 @@ func NewRequest() *Request {
 	return &Request{}
 }
 
-func (builder *Request) SetCallback(callback *Callback) {
+func (builder *Request) SetCallback(callback *Callback) *Request {
 	builder.Callback = callback
+	return builder
 }
 
-func (builder *Request) SetOption(option *Option) {
+func (builder *Request) SetOption(option *Option) *Request {
 	builder.Option = option
+	return builder
 }
 
-func (builder *Request) SetMessage(message *Message) {
+func (builder *Request) SetMessage(message *Message) *Request {
 	builder.Message = message
+	return builder
 }
 
-func (builder *Request) SetNotification(notification *Notification) {
+func (builder *Request) SetNotification(notification *Notification) *Request {
 	builder.Notification = notification
+	return builder
 }
 
-func (builder *Request) SetAudienceAll(audience *Audience) {
+func (builder *Request) SetAudience(audience *Audience) *Request {
 	builder.Audience = audience.ToJsonElement()
+	return builder
 }
 
-func (builder *Request) SetCid(cid string) {
+func (builder *Request) SetCid(cid string) *Request {
 	builder.Cid = cid
+	return builder
 }
 
-func (builder *Request) SetPlatform(platform *Platform) {
+func (builder *Request) SetPlatform(platform *Platform) *Request {
 	builder.Platform = platform.ToJsonElement()
+	return builder
 }
