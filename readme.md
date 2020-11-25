@@ -14,24 +14,20 @@
     
     func TestClient_SendNotification(t *testing.T) {
         // todo 更换appKey 和 secretKey
-        client := NewClient("appKey", "secretKey")
-    
+        client := NewClient("appKey", "masterSecret")
+
         request := NewRequest()
     
-        platform := NewPlatform().Android()
-    
+        platform := NewPlatform().Android().Ios()
         request.SetPlatform(platform)
     
-        audience := NewAudience()
-        audience.SetRegistrationIds([]string{"13065ffa4e6342a6f5c"})
+        audience := NewAudience().SetRegistrationIds([]string{"140fe1da9e2573338e7"})
+        request.SetAudienceAll(audience)
     
-        notification := &Notification{}
-        notification.Android = &AndroidNotification{
+        notification := NewNotification().SetAndroid(&AndroidNotification{
             Alert: "测试一下看看能否正常发送",
             Title: "测试",
-        }
-    
-        request.SetAudienceAll(audience)
+        })
         request.SetNotification(notification)
     
         result, err := client.Send(request)
