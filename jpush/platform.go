@@ -6,6 +6,7 @@ package jpush
 type DeviceType string
 
 const (
+
 	// 安卓平台
 	Android DeviceType = "android"
 

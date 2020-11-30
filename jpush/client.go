@@ -16,12 +16,14 @@ type Client struct {
 	AppKey       string
 	MasterSecret string
 	httpClient   *http.Client
+	debug        bool
 }
 
-func NewClient(appKey, masterSecret string) *Client {
+func NewClient(appKey, masterSecret string, enableDebug bool) *Client {
 	client := &Client{
 		AppKey:       appKey,
 		MasterSecret: masterSecret,
+		debug:        enableDebug,
 	}
 	client.initHttpClient()
 	return client
@@ -40,16 +42,22 @@ func (client *Client) initHttpClient() {
 	client.httpClient = &http.Client{Transport: tr}
 }
 
+// 生成签名
 func (client *Client) GenerateAuthorization() string {
 	return base64.StdEncoding.EncodeToString([]byte(client.AppKey + ":" + client.MasterSecret))
 }
 
+// 发送推送
 func (client *Client) Send(request *Request) (result *PushResult, err error) {
 	body := &bytes.Buffer{}
 
-	requestByte, err := json.Marshal(request)
+	requestByte, err := json.Marshal(request.ToJsonElement())
 	if err != nil {
 		return
+	}
+
+	if client.debug {
+		logrus.WithFields(logrus.Fields{"body": string(requestByte)}).Println("request body.")
 	}
 
 	_, err = body.Write(requestByte)
@@ -78,6 +86,7 @@ func (client *Client) Send(request *Request) (result *PushResult, err error) {
 	return handleResponse(resp)
 }
 
+// 处理返回结果
 func handleResponse(resp *http.Response) (result *PushResult, err error) {
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

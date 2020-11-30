@@ -8,25 +8,59 @@ type Audience struct {
 	all bool
 
 	// 标签，多组标签的关系是Or的关系，即取并集
-	Tag []string `json:"tag,omitempty"`
+	tag []string
 
 	// 标签，多组标签的关系是And关系，取交集
-	TagAnd []string `json:"tag_and,omitempty"`
+	tagAnd []string
 
 	// 标签，多组标签的关系是先取并集，再取补集
-	TagNot []string `json:"tag_not,omitempty"`
+	tagNot []string
 
 	// 别名，多个别名之间是Or的关系，取交集
-	Alias []string `json:"alias,omitempty"`
+	alias []string
 
 	// 注册ID，多个注册Id之间是Or的关系，即取并集
-	RegistrationIds []string `json:"registration_id,omitempty"`
+	registrationIds []string
 
 	// 用户分群id，分群id
-	Segment []string `json:"segment,omitempty"`
+	segment []string
 
 	// AB测Id，在页面创建AB测
-	AbTest []string `json:"abtest,omitempty"`
+	abTest []string
+}
+
+func (a *Audience) ToJsonElement() interface{} {
+	if a.all {
+		return All
+	}
+
+	var jsonElement = make(map[string]interface{})
+
+	AssertNotNull(a.tag, func() {
+		jsonElement["tag"] = a.tag
+	})
+
+	AssertNotNull(a.tagAnd, func() {
+		jsonElement["tag_and"] = a.tagAnd
+	})
+
+	AssertNotNull(a.alias, func() {
+		jsonElement["alias"] = a.alias
+	})
+
+	AssertNotNull(a.registrationIds, func() {
+		jsonElement["registration_id"] = a.registrationIds
+	})
+
+	AssertNotNull(a.segment, func() {
+		jsonElement["segment"] = a.segment
+	})
+
+	AssertNotNull(a.abTest, func() {
+		jsonElement["abtest"] = a.abTest
+	})
+
+	return jsonElement
 }
 
 func NewAudience() *Audience {
@@ -38,79 +72,72 @@ func (a *Audience) All() *Audience {
 	return a
 }
 
-func (a *Audience) SetTag(tag []string) *Audience {
-	a.Tag = tag
+func (a *Audience) Tag(tag []string) *Audience {
+	a.tag = tag
 	return a
 }
 
 func (a *Audience) AddTag(tag string) *Audience {
-	a.Tag = append(a.Tag, tag)
+	a.tag = append(a.tag, tag)
 	return a
 }
 
-func (a *Audience) SetTagAnd(tagAnd []string) *Audience {
-	a.TagAnd = tagAnd
+func (a *Audience) TagAnd(tagAnd []string) *Audience {
+	a.tagAnd = tagAnd
 	return a
 }
 
 func (a *Audience) AddTagAnd(tagAnd string) *Audience {
-	a.TagAnd = append(a.TagAnd, tagAnd)
+	a.tagAnd = append(a.tagAnd, tagAnd)
 	return a
 }
 
-func (a *Audience) SetTagNot(tagNot []string) *Audience {
-	a.TagNot = tagNot
+func (a *Audience) TagNot(tagNot []string) *Audience {
+	a.tagNot = tagNot
 	return a
 }
 
 func (a *Audience) AddTagNot(tagNot string) *Audience {
-	a.TagNot = append(a.TagNot, tagNot)
+	a.tagNot = append(a.tagNot, tagNot)
 	return a
 }
 
-func (a *Audience) SetAlias(alias []string) *Audience {
-	a.Alias = alias
+func (a *Audience) Alias(alias []string) *Audience {
+	a.alias = alias
 	return a
 }
 
 func (a *Audience) AddAlias(alias string) *Audience {
-	a.Alias = append(a.Alias, alias)
+	a.alias = append(a.alias, alias)
 	return a
 }
 
-func (a *Audience) SetRegistrationIds(registrationIds []string) *Audience {
-	a.RegistrationIds = registrationIds
+func (a *Audience) RegistrationIds(registrationIds []string) *Audience {
+	a.registrationIds = registrationIds
 	return a
 }
 
-func (a *Audience) AddRegistrationIds(registrationId string) *Audience {
-	a.RegistrationIds = append(a.RegistrationIds, registrationId)
+func (a *Audience) AddRegistrationId(registrationId string) *Audience {
+	a.registrationIds = append(a.registrationIds, registrationId)
 	return a
 }
 
-func (a *Audience) SetSegment(segment []string) *Audience {
-	a.Segment = segment
+func (a *Audience) Segment(segment []string) *Audience {
+	a.segment = segment
 	return a
 }
 
 func (a *Audience) AddSegment(segment string) *Audience {
-	a.Segment = append(a.Segment, segment)
+	a.segment = append(a.segment, segment)
 	return a
 }
 
-func (a *Audience) SetAbTest(abTest []string) *Audience {
-	a.AbTest = abTest
+func (a *Audience) AbTest(abTest []string) *Audience {
+	a.abTest = abTest
 	return a
 }
 
 func (a *Audience) AddAbTest(abTest string) *Audience {
-	a.AbTest = append(a.AbTest, abTest)
-	return a
-}
-
-func (a *Audience) ToJsonElement() interface{} {
-	if a.all {
-		return All
-	}
+	a.abTest = append(a.abTest, abTest)
 	return a
 }

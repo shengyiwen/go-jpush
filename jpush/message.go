@@ -17,3 +17,7 @@ type Message struct {
 	// JSON 格式的可选参数
 	Extras map[string]interface{} `json:"extras,omitempty"`
 }
+
+func (m *Message) ToJsonElement() interface{} {
+	return m
+}

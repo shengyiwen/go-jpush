@@ -25,3 +25,7 @@ type Option struct {
 	// ThirdPartyChannel map[string]interface{} `json:"third_party_channel"`
 
 }
+
+func (o *Option) ToJsonElement() interface{} {
+	return o
+}

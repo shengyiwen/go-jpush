@@ -5,15 +5,18 @@ import (
 	"net/http"
 )
 
-type PushModel interface {
-	ToJsonElement() interface{}
-}
-
 // 所有平台
 const All string = "all"
 
 // 推送地址
 const PushUrl string = "https://api.jpush.cn/v3/push"
+
+// 推送Model对象，即所有推送内容的配置都能转为Json元素
+type PushModel interface {
+
+	// 转为Json元素
+	ToJsonElement() interface{}
+}
 
 // 消息推送结果
 type PushResult struct {
@@ -31,12 +34,25 @@ type PushResult struct {
 	Error *PushError `json:"error"`
 }
 
+// 是否调用成功
+func (res *PushResult) IsSuccess() bool {
+	return res.StatusCode == http.StatusOK && res.Error == nil
+}
+
+// String处理
+func (res *PushResult) String() string {
+	marshal, _ := json.Marshal(res)
+	return string(marshal)
+}
+
+// 推送错误结果
 type PushError struct {
 	Message string `json:"message"`
 
 	Code int `json:"code"`
 }
 
+// 从推送返回内容解析推送结果
 func FromResponse(statusCode int, body string) (*PushResult, error) {
 	result := &PushResult{}
 	result.StatusCode = statusCode
@@ -45,13 +61,4 @@ func FromResponse(statusCode int, body string) (*PushResult, error) {
 		return nil, err
 	}
 	return result, nil
-}
-
-func (res *PushResult) IsSuccess() bool {
-	return res.StatusCode == http.StatusOK && res.Error == nil
-}
-
-func (res *PushResult) String() string {
-	marshal, _ := json.Marshal(res)
-	return string(marshal)
 }

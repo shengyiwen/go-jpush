@@ -6,42 +6,60 @@ type Notification struct {
 
 	// 通知到内容在各个平台上，都可能只有这一个基础的属性Alert
 	// 这个Alert是个快捷定义，在各个平台通知里也有Alert定义，且平台通知里的优先级要高
-	Alert string `json:"alert,omitempty"`
+	alert string
 
 	// Ios的通知内容
-	Ios *IosNotification `json:"ios,omitempty"`
+	ios *IosNotification
 
 	// Android的通知内容
-	Android *AndroidNotification `json:"android,omitempty"`
+	android *AndroidNotification
 
-	Voip *map[string]interface{} `json:"voip,omitempty"`
+	voip *map[string]interface{}
+}
+
+func (n *Notification) ToJsonElement() interface{} {
+	var jsonElement = make(map[string]interface{})
+
+	AssertNotNull(n.alert, func() {
+		jsonElement["alert"] = n.alert
+	})
+
+	AssertNotNull(n.ios, func() {
+		jsonElement["ios"] = n.ios.ToJsonElement()
+	})
+
+	AssertNotNull(n.android, func() {
+		jsonElement["android"] = n.android.ToJsonElement()
+	})
+
+	AssertNotNull(n.voip, func() {
+		jsonElement["voip"] = n.voip
+	})
+
+	return jsonElement
 }
 
 func NewNotification() *Notification {
 	return &Notification{}
 }
 
-func (n *Notification) SetAlert(alert string) *Notification {
-	n.Alert = alert
+func (n *Notification) Alert(alert string) *Notification {
+	n.alert = alert
 	return n
 }
 
-func (n *Notification) SetIos(ios *IosNotification) *Notification {
-	n.Ios = ios
+func (n *Notification) Ios(ios *IosNotification) *Notification {
+	n.ios = ios
 	return n
 }
 
-func (n *Notification) SetAndroid(android *AndroidNotification) *Notification {
-	n.Android = android
+func (n *Notification) Android(android *AndroidNotification) *Notification {
+	n.android = android
 	return n
 }
 
-func (n *Notification) SetVopi(vopi *map[string]interface{}) *Notification {
-	n.Voip = vopi
-	return n
-}
-
-func (n *Notification) ToJsonElement() interface{} {
+func (n *Notification) Vopi(vopi *map[string]interface{}) *Notification {
+	n.voip = vopi
 	return n
 }
 
@@ -114,6 +132,10 @@ type AndroidNotification struct {
 	DisplayForeground string `json:"display_foreground,omitempty"`
 }
 
+func (an *AndroidNotification) ToJsonElement() interface{} {
+	return an
+}
+
 type IosNotification struct {
 
 	// 通知内容，如果制定了，覆盖Notification中的Alert
@@ -140,4 +162,8 @@ type IosNotification struct {
 
 	// 通知分组
 	ThreadId string `json:"thread-id,omitempty"`
+}
+
+func (in *IosNotification) ToJsonElement() interface{} {
+	return in
 }

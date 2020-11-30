@@ -9,3 +9,7 @@ type Callback struct {
 
 	Type string `json:"type,omitempty"`
 }
+
+func (c *Callback) ToJsonElement() interface{} {
+	return c
+}
