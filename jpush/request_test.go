@@ -13,5 +13,4 @@ func TestRequestToJsonElement(t *testing.T) {
 
 	bytes, _ := json.Marshal(request.ToJsonElement())
 	t.Log(string(bytes))
-
 }
