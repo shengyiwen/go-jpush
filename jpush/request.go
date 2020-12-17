@@ -1,19 +1,13 @@
 package jpush
 
 type Request struct {
-	cid string
-
-	platform *Platform
-
-	audience *Audience
-
+	cid          string
+	platform     *Platform
+	audience     *Audience
 	notification *Notification
-
-	message *Message
-
-	option *Option
-
-	callback *Callback
+	message      *Message
+	option       *Option
+	callback     *Callback
 }
 
 func (builder *Request) ToJsonElement() interface{} {
