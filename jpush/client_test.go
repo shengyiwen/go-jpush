@@ -4,11 +4,11 @@ import "testing"
 
 func TestClient_SendNotification(t *testing.T) {
 
-	client := NewClient("x", "x", true)
+	client := NewClient("806a24650079d40b9f0cea61", "71e9a6e9fb046e92cca3289d", true)
 
 	platform := NewPlatform().Android().Ios()
 
-	audience := NewAudience().AddRegistrationId("140fe1da9e2573338e7")
+	audience := NewAudience().AddRegistrationId("1507bfd3f7afd7426fc")
 
 	notification := NewNotification().
 		Android(&AndroidNotification{Alert: "测试一下看看能否正常发送", Title: "测试"}).
