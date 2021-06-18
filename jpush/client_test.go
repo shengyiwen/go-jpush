@@ -4,7 +4,7 @@ import "testing"
 
 func TestClient_SendNotification(t *testing.T) {
 
-	client := NewClient("806a24650079d40b9f0cea61", "71e9a6e9fb046e92cca3289d", true)
+	client := NewClient("", "", true)
 
 	platform := NewPlatform().Android().Ios()
 
